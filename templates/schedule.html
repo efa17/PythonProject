@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Event Schedule</title>
+ <style>
+  :root {
+    --primary-color: #ffffff;
+    --text-color: #000000;
+    --accent-color: #007BFF; /* Blue */
+    --button-color: #FFAD00; /* Good yellow */
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f2f4f8;
+    color: var(--text-color);
+  }
+
+  header {
+    background: var(--primary-color);
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 255, 0.2);
+    text-align: center;
+  }
+
+  header h2 {
+    color: rgba(0, 0, 255, 0.9);
+    margin: 0;
+  }
+
+  .schedule {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 255, 0.15); /* Blue drop shadow */
+  }
+
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+
+  input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--button-color); /* Good yellow */
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #000;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.2); /* Blue drop shadow */
+  }
+
+  input[type="submit"]:hover {
+    background-color: #e69900;
+  }
+
+  .day-block {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #fdfdfd;
+    border-left: 4px solid var(--accent-color);
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 255, 0.8); /* Blue drop shadow */
+  }
+
+  .day-block h3 {
+    margin-top: 0;
+    color: #333;
+  }
+
+  .shift-section {
+    margin-top: 1.2rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-left: 5px solid var(--accent-color);
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 255, 0.25); /* Blue drop shadow */
+  }
+
+  .shift-section h4 {
+    margin-top: 0;
+    color: #004499;
+  }
+</style>
+
+</head>
+<body>
+
+  <header>
+    <h2>Fest 2025 - Schedule</h2>
+  </header>
+
+  <div class="schedule">
+    <form id="event-form">
+
+      <!-- Main Event Info -->
+      <div class="form-group">
+        <label for="main-event-name">Main Event Name</label>
+        <input type="text" id="main-event-name" name="main-event-name" placeholder="Enter event name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="main-event-date">Start Date</label>
+        <input type="date" id="main-event-date" name="main-event-date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="main-event-time">Start Time</label>
+        <input type="time" id="main-event-time" name="main-event-time" required>
+      </div>
+
+      <!-- Number of Days -->
+      <div class="form-group">
+        <label for="event-days">Number of Days</label>
+        <select id="event-days" name="event-days" required onchange="generateDayBlocks()">
+          <option value="" disabled selected>Select number of days</option>
+          <option value="1">1 Day</option>
+          <option value="2">2 Days</option>
+          <option value="3">3 Days</option>
+          <option value="4">4 Days</option>
+          <option value="5">5 Days</option>
+          <option value="6">6 Days</option>
+          <option value="7">7 Days</option>
+        </select>
+      </div>
+
+      <!-- Dynamic Days Section -->
+      <div id="day-blocks"></div>
+
+      <input type="submit" value="Add Event(s)">
+    </form>
+  </div>
+
+  <script>
+    function generateDayBlocks() {
+      const container = document.getElementById('day-blocks');
+      container.innerHTML = '';
+      const numDays = parseInt(document.getElementById('event-days').value);
+
+      for (let i = 1; i <= numDays; i++) {
+        const block = document.createElement('div');
+        block.classList.add('day-block');
+        block.innerHTML = `
+          <h3>Day ${i}</h3>
+
+          <!-- Morning Shift -->
+          <div class="shift-section">
+            <h4>Morning Shift</h4>
+            <div class="form-group">
+              <label for="event-name-morning-${i}">Event Name</label>
+              <input type="text" id="event-name-morning-${i}" required>
+            </div>
+            <div class="form-group">
+              <label for="event-date-morning-${i}">Date</label>
+              <input type="date" id="event-date-morning-${i}" required>
+            </div>
+            <div class="form-group">
+              <label for="event-time-morning-${i}">Time</label>
+              <input type="time" id="event-time-morning-${i}" required>
+            </div>
+          </div>
+
+          <!-- Afternoon Shift -->
+          <div class="shift-section">
+            <h4>Afternoon Shift</h4>
+            <div class="form-group">
+              <label for="event-name-afternoon-${i}">Event Name</label>
+              <input type="text" id="event-name-afternoon-${i}" required>
+            </div>
+            <div class="form-group">
+              <label for="event-date-afternoon-${i}">Date</label>
+              <input type="date" id="event-date-afternoon-${i}" required>
+            </div>
+            <div class="form-group">
+              <label for="event-time-afternoon-${i}">Time</label>
+              <input type="time" id="event-time-afternoon-${i}" required>
+            </div>
+          </div>
+
+          <!-- Evening Shift -->
+          <div class="shift-section">
+            <h4>Evening Shift</h4>
+            <div class="form-group">
+              <label for="event-name-evening-${i}">Event Name</label>
+              <input type="text" id="event-name-evening-${i}" required>
+            </div>
+            <div class="form-group">
+              <label for="event-date-evening-${i}">Date</label>
+              <input type="date" id="event-date-evening-${i}" required>
+            </div>
+            <div class="form-group">
+              <label for="event-time-evening-${i}">Time</label>
+              <input type="time" id="event-time-evening-${i}" required>
+            </div>
+          </div>
+        `;
+        container.appendChild(block);
+      }
+    }
+  </script>
+
+</body>
+</html>
